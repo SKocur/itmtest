@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: itm
+    ports:
+      - "5432:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: test
+      RABBITMQ_DEFAULT_PASS: test
+
+  app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - rabbitmq
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: itm
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USERNAME: test
+      RABBITMQ_PASSWORD: test
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: itmtest
+  jpa:
+    properties:
+      hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 100
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:itm}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/itm-master.xml
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:test}
+    password: ${RABBITMQ_PASSWORD:test}
